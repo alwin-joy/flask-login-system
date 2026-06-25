@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import pyotp
+import random
 
 # Create Flask App
 app = Flask(__name__)
 
-# Secret Key for Sessions
+# Secret Key
 app.config['SECRET_KEY'] = 'secret123'
 
 # SQLite Database
@@ -13,6 +17,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
 # Initialize Database
 db = SQLAlchemy(app)
+
+# Rate Limiter
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["10 per minute"]
+)
+
+# Temporary OTP Storage
+otp_storage = {}
 
 # User Table
 class User(db.Model):
@@ -25,7 +39,6 @@ class User(db.Model):
 
     password = db.Column(db.String(200), nullable=False)
 
-    # Automatically verified
     verified = db.Column(db.Boolean, default=True)
 
 
@@ -38,6 +51,7 @@ def home():
 
 # Register Page
 @app.route('/register', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def register():
 
     if request.method == 'POST':
@@ -46,7 +60,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        # Check if email already exists
+        # Check Existing User
         existing_user = User.query.filter_by(email=email).first()
 
         if existing_user:
@@ -74,6 +88,7 @@ def register():
 
 # Login Page
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def login():
 
     if request.method == 'POST':
@@ -84,25 +99,64 @@ def login():
         # Find User
         user = User.query.filter_by(email=email).first()
 
-        # Check Password
+        # Verify Password
         if user and check_password_hash(user.password, password):
 
-            # Create Session
-            session['user_id'] = user.id
-            session['username'] = user.username
+            # Generate 6-digit OTP
+            otp = random.randint(100000, 999999)
 
-            return redirect(url_for('dashboard'))
+            # Store OTP
+            otp_storage[email] = otp
+
+            print(f"OTP for {email}: {otp}")
+
+            # Store Temporary Session
+            session['temp_email'] = email
+
+            return redirect(url_for('verify_otp'))
 
         return "Invalid Email or Password"
 
     return render_template('login.html')
 
 
-# Dashboard Page
+# OTP Verification Page
+@app.route('/verify-otp', methods=['GET', 'POST'])
+def verify_otp():
+
+    if request.method == 'POST':
+
+        entered_otp = request.form['otp']
+
+        email = session.get('temp_email')
+
+        if not email:
+            return redirect(url_for('login'))
+
+        real_otp = otp_storage.get(email)
+
+        if real_otp and str(real_otp) == entered_otp:
+
+            user = User.query.filter_by(email=email).first()
+
+            # Create Real Session
+            session['user_id'] = user.id
+            session['username'] = user.username
+
+            # Remove OTP
+            otp_storage.pop(email)
+
+            return redirect(url_for('dashboard'))
+
+        return "Invalid OTP"
+
+    return render_template('otp.html')
+
+
+# Dashboard
 @app.route('/dashboard')
 def dashboard():
 
-    # Check if logged in
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
@@ -115,11 +169,10 @@ def dashboard():
     '''
 
 
-# Logout Route
+# Logout
 @app.route('/logout')
 def logout():
 
-    # Clear Session
     session.clear()
 
     return redirect(url_for('login'))
