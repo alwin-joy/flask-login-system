@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import pyotp
+from flask_mail import Mail, Message
 import random
 
 # Create Flask App
@@ -15,8 +15,18 @@ app.config['SECRET_KEY'] = 'secret123'
 # SQLite Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
+# Gmail Configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True 
+app.config['MAIL_USERNAME'] = 'alwinj825@gmail.com'
+app.config['MAIL_PASSWORD'] = 'beof qdtl dtpj rxyo'
+
 # Initialize Database
 db = SQLAlchemy(app)
+
+# Initialize Mail
+mail = Mail(app)
 
 # Rate Limiter
 limiter = Limiter(
@@ -99,18 +109,33 @@ def login():
         # Find User
         user = User.query.filter_by(email=email).first()
 
-        # Verify Password
+        # Check Password
         if user and check_password_hash(user.password, password):
 
-            # Generate 6-digit OTP
+            # Generate OTP
             otp = random.randint(100000, 999999)
 
             # Store OTP
             otp_storage[email] = otp
 
-            print(f"OTP for {email}: {otp}")
+            # Send OTP Email
+            msg = Message(
+                'Your OTP Code',
+                sender='yourgmail@gmail.com',
+                recipients=[email]
+            )
 
-            # Store Temporary Session
+            msg.body = f'''
+Your OTP Code is:
+
+{otp}
+
+Do not share this OTP with anyone.
+'''
+
+            mail.send(msg)
+
+            # Temporary Session
             session['temp_email'] = email
 
             return redirect(url_for('verify_otp'))
@@ -135,15 +160,16 @@ def verify_otp():
 
         real_otp = otp_storage.get(email)
 
+        # Verify OTP
         if real_otp and str(real_otp) == entered_otp:
 
             user = User.query.filter_by(email=email).first()
 
-            # Create Real Session
+            # Create Login Session
             session['user_id'] = user.id
             session['username'] = user.username
 
-            # Remove OTP
+            # Remove OTP After Verification
             otp_storage.pop(email)
 
             return redirect(url_for('dashboard'))
@@ -157,6 +183,7 @@ def verify_otp():
 @app.route('/dashboard')
 def dashboard():
 
+    # Check Login Session
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
