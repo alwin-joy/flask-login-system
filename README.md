@@ -54,6 +54,12 @@ Flask-login-system/
 │   ├── otp.html
 │   └── verify_success.html
 │
+├── screenshots/
+│   ├── dashboard_page.png.png
+│   ├── login_page.png.png
+│   ├── otp_page.png.png
+│   └── register_page.png.png
+│
 └── myenv/
 ```
 
