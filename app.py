@@ -4,13 +4,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_mail import Mail, Message
-import random
+import random, re 
 
 # Create Flask App
 app = Flask(__name__)
 
 # Secret Key
 app.config['SECRET_KEY'] = 'secret123'
+
+# Session Security
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SECURE'] = False
 
 # SQLite Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -19,8 +23,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True 
-app.config['MAIL_USERNAME'] = 'yourgmai@gmail.com'
-app.config['MAIL_PASSWORD'] = 'your_app_password'
+app.config['MAIL_USERNAME'] = 'usergmail@gmail.com'
+app.config['MAIL_PASSWORD'] = 'user_gmail_password'
 
 # Initialize Database
 db = SQLAlchemy(app)
@@ -61,7 +65,6 @@ def home():
 
 # Register Page
 @app.route('/register', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")
 def register():
 
     if request.method == 'POST':
@@ -69,6 +72,18 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+
+        checks = [
+            (r".{8,}", "Minimum 8 characters required"),
+            (r"[A-Z]", "Add an uppercase letter"),
+            (r"[a-z]", "Add a lowercase letter"),
+            (r"[0-9]", "Add a number"),
+            (r"[!@#$%^&*]", "Add a special character")
+        ]
+
+        for pattern, message in checks:
+            if not re.search(pattern, password):
+                return message
 
         # Check Existing User
         existing_user = User.query.filter_by(email=email).first()
@@ -121,7 +136,7 @@ def login():
             # Send OTP Email
             msg = Message(
                 'Your OTP Code',
-                sender='yourgmail@gmail.com',
+                sender='alwinj825@gmail.com',
                 recipients=[email]
             )
 
