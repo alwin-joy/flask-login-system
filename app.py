@@ -163,7 +163,7 @@ Your OTP Code is:
 
 Do not share this OTP with anyone.
 '''
-
+            #mail.send(msg)
             print("OTP:", otp)
 
             # Temporary Session
