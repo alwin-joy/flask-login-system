@@ -36,10 +36,6 @@ app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 # Initialize Database
 db = SQLAlchemy(app)
 
-# Create Tables
-with app.app_context(): 
-    db.create_all()
-
 csrf = CSRFProtect(app)
 
 bcrypt = Bcrypt(app)
@@ -69,6 +65,10 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
 
     verified = db.Column(db.Boolean, default=True)
+
+# Create Tables
+with app.app_context(): 
+    db.create_all()
 
 
 # Home Page
