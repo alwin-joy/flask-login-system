@@ -36,6 +36,10 @@ app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 # Initialize Database
 db = SQLAlchemy(app)
 
+# Create Tables
+with app.app_context(): 
+    db.create_all()
+
 csrf = CSRFProtect(app)
 
 bcrypt = Bcrypt(app)
@@ -226,8 +230,5 @@ def logout():
 
 # Run Flask App
 if __name__ == '__main__':
-
-    with app.app_context():
-        db.create_all()
 
     app.run(debug=True)
