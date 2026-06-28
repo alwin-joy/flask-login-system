@@ -1,0 +1,317 @@
+/* BODY */
+
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family: Arial, sans-serif;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #081c24,
+            #3d2c4d,
+            #5b86e5
+        );
+}
+
+
+/* MAIN CONTAINER */
+
+.container {
+
+    width: 380px;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.12);
+
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+
+    text-align: center;
+}
+
+
+/* HEADINGS */
+
+h1 {
+
+    color: white;
+
+    font-size: 34px;
+
+    margin-bottom: 30px;
+
+    letter-spacing: 1px;
+}
+
+
+/* LABELS */
+
+label {
+
+    display: block;
+
+    text-align: left;
+
+    color: white;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+}
+
+
+/* INPUT FIELDS */
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+
+    width: 100%;
+
+    padding: 14px;
+
+    margin-bottom: 20px;
+
+    border: 1px solid rgba(255,255,255,0.25);
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,0.10);
+
+    color: white;
+
+    font-size: 15px;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition: 0.3s;
+}
+
+
+/* PLACEHOLDER */
+
+input::placeholder {
+
+    color: #dddddd;
+}
+
+
+/* INPUT FOCUS */
+
+input:focus {
+
+    border: 1px solid #d946ef;
+
+    box-shadow: 0 0 12px #d946ef;
+
+    background: rgba(255,255,255,0.18);
+}
+
+
+/* CAPTCHA BOX */
+
+.captcha-box {
+
+    background: rgba(255,255,255,0.95);
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+
+    color: black;
+
+    font-size: 15px;
+}
+
+.captcha-box input {
+
+    width: 18px;
+
+    height: 18px;
+
+    cursor: pointer;
+}
+
+
+/* BUTTON */
+
+button {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff512f,
+            #dd2476
+        );
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+/* BUTTON HOVER */
+
+button:hover {
+
+    transform: scale(1.03);
+
+    opacity: 0.9;
+}
+
+
+ /*  PARAGRAPH */
+
+
+p {
+
+    color: white;
+
+    margin-top: 20px;
+
+    font-size: 15px;
+}
+
+
+ /* LINKS  */
+
+
+a {
+
+    color: #ff66c4;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+a:hover {
+
+    text-decoration: underline;
+
+    color: #ffffff;
+}
+
+/* DASHBOARD PAGE */
+
+
+.dashboard-box {
+
+    width: 420px;
+
+    padding: 50px;
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    background: rgba(255,255,255,0.12);
+
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+}
+
+
+/* Dashboard Heading */
+
+
+.dashboard-box h1 {
+
+    color: white;
+
+    font-size: 40px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Dashboard Sub Heading */
+
+
+.dashboard-box h2 {
+
+    color: whitesmoke;
+
+    margin-bottom: 35px;
+
+    font-weight: normal;
+}
+
+/* Logout Button */
+
+
+.logout-btn {
+
+    display: inline-block;
+
+    padding: 14px 35px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff512f,
+            #dd2476
+        );
+
+    transition: 0.3s;
+}
+
+/* Logout Hover */
+
+.logout-btn:hover {
+
+    transform: scale(1.05);
+
+    opacity: 0.9;
+}

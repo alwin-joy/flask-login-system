@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>OTP Verification</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 <body>
 
-    <h2>Enter OTP</h2>
+    <div class="container">
 
-    <form method="POST">
+        <h1>OTP Verification</h1>
 
-        <input type="text" name="otp" placeholder="Enter OTP" required>
+        <form method="POST">
 
-        <button type="submit">Verify OTP</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-    </form>
+            <label>Enter OTP</label>
+
+            <input type="text"
+                   name="otp"
+                   placeholder="Enter your OTP"
+                   required>
+
+            <button type="submit">
+                Verify OTP
+            </button>
+
+        </form>
+
+    </div>
 
 </body>
+
 </html>

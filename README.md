@@ -1,115 +1,156 @@
-# Flask Login System
+# Flask Login System with OTP Verification
 
 ## Project Description
 
-This project is a Flask-based Login and Registration Portal developed using Python and SQLite. The application allows users to register, log in securely, verify credentials using OTP authentication, maintain login sessions, and log out safely.
+This project is a secure Flask-based Login and Registration System with OTP Email Verification.
+It includes user authentication, session management, password hashing, rate limiting, CAPTCHA validation, and modern UI design.
 
-The system also includes password hashing for secure password storage and rate limiting to prevent brute-force attacks.
+Users can:
+
+* Register an account
+* Login securely
+* Receive OTP verification through Gmail
+* Access dashboard after verification
+* Logout safely
 
 ---
 
-## Features
+# Features
 
 * User Registration
-* Secure Password Hashing
-* Login Authentication
-* OTP Verification
+* Secure Login System
+* OTP Email Verification
+* Password Hashing
 * Session Management
-* Logout Functionality
-* SQLite Database Integration
-* Rate Limiting for Security
+* Rate Limiting Protection
+* CAPTCHA Checkbox
+* Strong Password Validation
+* SQLite Database
+* Modern Glassmorphism UI
+* Environment Variable Security using `.env`
 
 ---
 
-## Technologies Used
+# Technologies Used
 
 * Python
 * Flask
 * Flask-SQLAlchemy
+* Flask-Mail
 * Flask-Limiter
+* Flask-WTF
 * SQLite
 * HTML
 * CSS
-* Werkzeug Security
-* PyOTP
+* dotenv
 
 ---
 
-## Project Structure
+# Folder Structure
 
 ```plaintext
 Flask-login-system/
 │
-├── app.py
-├── requirements.txt
-├── README.md
-├── .gitignore
+├── static/
+│   └── style.css
+│
+├── templates/
+│   ├── register.html
+│   ├── login.html
+│   ├── otp.html
+│   └── dashboard.html
+│
+├── screenshots/
+│   ├── register-page.png
+│   ├── login-page.png
+│   ├── otp-page.png
+│   └── dashboard-page.png
 │
 ├── instance/
 │   └── users.db
 │
-├── templates/
-│   ├── login.html
-│   ├── register.html
-│   ├── otp.html
-│   └── verify_success.html
-│
-├── screenshots/
-│   ├── dashboard_page.png.png
-│   ├── login_page.png.png
-│   ├── otp_page.png.png
-│   └── register_page.png.png
-│
-└── myenv/
+├── .env
+├── .gitignore
+├── README.md
+├── app.py
+└── requirements.txt
 ```
 
 ---
 
-## Installation Instructions
+# Installation
 
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/yourusername/flask-login-system.git
-```
-
-### 2. Open Project Folder
+## Clone Repository
 
 ```bash
-cd flask-login-system
+git clone <your-github-repository-link>
 ```
 
-### 3. Create Virtual Environment
+---
+
+## Open Project Folder
+
+```bash
+cd Flask-login-system
+```
+
+---
+
+## Create Virtual Environment
 
 ```bash
 python -m venv myenv
 ```
 
-### 4. Activate Virtual Environment
+---
 
-#### Windows
+## Activate Virtual Environment
+
+### Windows
 
 ```bash
-.\myenv\Scripts\activate
+myenv\Scripts\activate
 ```
 
-### 5. Install Required Packages
+### Linux / Mac
 
 ```bash
-python -m pip install -r requirements.txt
+source myenv/bin/activate
 ```
 
 ---
 
-## Usage Instructions
+## Install Requirements
 
-### Run Flask Application
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Configure Environment Variables
+
+Create a `.env` file in the root folder.
+
+Add:
+
+```env
+SECRET_KEY=secret123
+
+MAIL_USERNAME=yourgmail@gmail.com
+
+MAIL_PASSWORD=your_16_digit_app_password
+```
+
+---
+
+# Run Flask App
 
 ```bash
 python app.py
 ```
 
-### Open Browser
+Open browser:
 
 ```plaintext
 http://127.0.0.1:5000
@@ -117,60 +158,38 @@ http://127.0.0.1:5000
 
 ---
 
-## Workflow
+# Security Features
 
-1. User registers an account.
-2. Password is securely hashed and stored in SQLite database.
-3. User logs in using email and password.
-4. System generates OTP verification code.
-5. User enters OTP successfully.
-6. Session is created.
-7. User accesses dashboard.
-8. User logs out securely.
+* Password Hashing
+* OTP Authentication
+* Rate Limiting
+* CSRF Protection
+* Environment Variable Protection
+* Session Security
 
 ---
 
-## Security Features
+# Screenshots
 
-* Password Hashing using Werkzeug
-* Session-Based Authentication
-* OTP Verification
-* Rate Limiting Protection
 
----
-
-## Screenshots
-
-### Register Page
-![Register Page](screenshots/register_page.png)
-
-### Login Page
-![Login Page](screenshots/login_page.png)
-
-### OTP Page
-![OTP Page](screenshots/otp_page.png)
-
-### Dashboard Page
-![Dashboard Page](screenshots/dashboard_page.png)
+* [Register Page](screenshots/register-page.png)
+* [Login Page](screenshots/login-page.png)
+* [OTP Page](screenshots/otp-page.png)
+* [Dashboard Page](screenshots/dashboard-page.png)
 
 ---
 
-## Live Demo
+# Future Improvements
 
-Local Host URL:
-
-```plaintext
-http://127.0.0.1:5000
-```
-
-GitHub Repository:
-
-```plaintext
-https://github.com/yourusername/flask-login-system
-```
+* Google reCAPTCHA
+* Password Reset System
+* Email Verification Links
+* Cloud Deployment
+* JWT Authentication
 
 ---
 
-## Author
+# Author
 
 Alwin Joy
+

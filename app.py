@@ -3,14 +3,20 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_wtf.csrf import CSRFProtect
+from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
-import random, re 
+from dotenv import load_dotenv
+import random, re
+import os
+
+load_dotenv()
 
 # Create Flask App
 app = Flask(__name__)
 
 # Secret Key
-app.config['SECRET_KEY'] = 'secret123'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Session Security
 app.config['SESSION_COOKIE_HTTPONLY'] = True
@@ -23,11 +29,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True 
-app.config['MAIL_USERNAME'] = 'usergmail@gmail.com'
-app.config['MAIL_PASSWORD'] = 'user_gmail_password'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+
 
 # Initialize Database
 db = SQLAlchemy(app)
+
+csrf = CSRFProtect(app)
+
+bcrypt = Bcrypt(app)
 
 # Initialize Mail
 mail = Mail(app)
@@ -91,8 +102,8 @@ def register():
         if existing_user:
             return "Email already registered"
 
-        # Hash Password
-        hashed_password = generate_password_hash(password)
+        # Hash Password using bcrypt
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
         # Create User
         user = User(
@@ -125,7 +136,7 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         # Check Password
-        if user and check_password_hash(user.password, password):
+        if user and bcrypt.check_password_hash(user.password, password):
 
             # Generate OTP
             otp = random.randint(100000, 999999)
@@ -136,7 +147,7 @@ def login():
             # Send OTP Email
             msg = Message(
                 'Your OTP Code',
-                sender='alwinj825@gmail.com',
+                sender=app.config['MAIL_USERNAME'],
                 recipients=[email]
             )
 
@@ -198,17 +209,10 @@ def verify_otp():
 @app.route('/dashboard')
 def dashboard():
 
-    # Check Login Session
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    return f'''
-    <h1>Welcome {session["username"]}!</h1>
-
-    <br>
-
-    <a href="/logout">Logout</a>
-    '''
+    return render_template('dashboard.html')
 
 
 # Logout
