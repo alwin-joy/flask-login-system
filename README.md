@@ -189,6 +189,37 @@ http://127.0.0.1:5000
 
 ---
 
+# Cloud Deployment
+
+This Flask Login System is deployed using Railway cloud hosting.
+
+## Deployment Features
+
+* Public cloud hosting
+* Automatic GitHub deployment
+* Environment variable support
+* Gunicorn production server
+* HTTPS support
+
+## Deployment Platform
+
+* Railway
+
+## Live Features Tested
+
+* User Registration
+* Login Authentication
+* OTP Email Sending
+* Dashboard Access
+* Logout System
+
+# Live Demo
+
+🚀 Live Website:
+
+https://flask-login-system-production-2f2a.up.railway.app
+
+
 # Author
 
 Alwin Joy
